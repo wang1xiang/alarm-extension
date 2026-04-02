@@ -45,7 +45,7 @@ async function triggerAlarm(alarm) {
   if (chrome.notifications) {
     chrome.notifications.create(`alarm_${alarm.id}_${Date.now()}`, {
       type: 'basic',
-      iconUrl: 'assets/icon.png',
+      iconUrl: chrome.runtime.getURL('assets/icon.png'),
       title: `⏰ ${label}`,
       message: `时间到了 ${formatTime(new Date())}！`,
       priority: 2,
@@ -104,7 +104,7 @@ async function triggerTimer(timer) {
   if (chrome.notifications) {
     chrome.notifications.create(`timer_${timer.id}_${Date.now()}`, {
       type: 'basic',
-      iconUrl: 'assets/icon.png',
+      iconUrl: chrome.runtime.getURL('assets/icon.png'),
       title: `⏱️ ${label} 结束`,
       message: '倒计时已结束！',
       priority: 2,
@@ -169,7 +169,7 @@ async function handleMessage(message) {
       if (chrome.notifications) {
         chrome.notifications.create(`test_${Date.now()}`, {
           type: 'basic',
-          iconUrl: 'assets/icon.png',
+          iconUrl: chrome.runtime.getURL('assets/icon.png'),
           title: '测试通知',
           message: '通知功能正常工作！',
           priority: 2,
