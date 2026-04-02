@@ -1,0 +1,37 @@
+/* Common styles shared between popup and other components */
+
+:root {
+  --primary-color: #e94560;
+  --primary-hover: #ff6b6b;
+  --secondary-color: #0f3460;
+  --secondary-hover: #1a4a7a;
+  --background: #1a1a2e;
+  --surface: #16213e;
+  --text-primary: #eee;
+  --text-secondary: #888;
+  --text-muted: #666;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-2 {
+  margin-top: 8px;
+}
+
+.mt-4 {
+  margin-top: 16px;
+}
+
+.mb-2 {
+  margin-bottom: 8px;
+}
+
+.mb-4 {
+  margin-bottom: 16px;
+}
