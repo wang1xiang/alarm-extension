@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Alarm & Timer",
+  "version": "1.0.0",
+  "description": "Alarm clock and countdown timer for your browser",
+  "permissions": [
+    "alarms",
+    "storage",
+    "notifications"
+  ],
+  "background": {
+    "service_worker": "background/service-worker.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Alarm & Timer",
+    "default_icon": {
+      "48": "assets/icon.png",
+      "128": "assets/icon.png"
+    }
+  },
+  "icons": {
+    "48": "assets/icon.png",
+    "128": "assets/icon.png"
+  }
+}
