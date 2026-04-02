@@ -102,14 +102,15 @@ window.toggleAlarm = async function(id, enabled) {
   const alarm = alarms.find(a => a.id === id);
   if (alarm) {
     alarm.enabled = enabled;
-    await sendMessage({ type: 'UPDATE_ALARM', alarm });
-    alarms = alarms.map(a => a.id === id ? alarm : a);
+    const result = await sendMessage({ type: 'UPDATE_ALARM', alarm });
+    alarms = result.alarms;
+    renderAlarms();
   }
 };
 
 window.deleteAlarm = async function(id) {
-  await sendMessage({ type: 'REMOVE_ALARM', id });
-  alarms = alarms.filter(a => a.id !== id);
+  const result = await sendMessage({ type: 'REMOVE_ALARM', id });
+  alarms = result.alarms;
   renderAlarms();
 };
 

@@ -8,6 +8,9 @@
     "storage",
     "notifications"
   ],
+  "host_permissions": [
+    "file:///*"
+  ],
   "background": {
     "service_worker": "background/service-worker.js"
   },
@@ -22,5 +25,11 @@
   "icons": {
     "48": "assets/icon.png",
     "128": "assets/icon.png"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/sounds/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
