@@ -61,8 +61,8 @@ function renderAlarms() {
   if (alarms.length === 0) {
     alarmList.innerHTML = `
       <div class="empty-state">
-        <p>No alarms set</p>
-        <p class="text-secondary" style="font-size: 12px;">Click + to add an alarm</p>
+        <p>暂无闹钟</p>
+        <p class="text-secondary" style="font-size: 12px;">点击 + 添加闹钟</p>
       </div>
     `;
     return;
@@ -72,7 +72,7 @@ function renderAlarms() {
     <div class="alarm-item" data-id="${alarm.id}">
       <div>
         <div class="alarm-time">${alarm.time}</div>
-        <div class="alarm-label">${alarm.label || 'Alarm'}</div>
+        <div class="alarm-label">${alarm.label || '闹钟'}</div>
         <div class="alarm-repeat" style="font-size: 12px;">${formatRepeat(alarm.repeat)}</div>
       </div>
       <div class="alarm-actions">
@@ -88,12 +88,12 @@ function renderAlarms() {
 }
 
 function formatRepeat(days) {
-  if (days.length === 0) return 'Once';
-  if (days.length === 7) return 'Every day';
-  if (days.length === 5 && !days.includes(0) && !days.includes(6)) return 'Weekdays';
-  if (days.length === 2 && days.includes(0) && days.includes(6)) return 'Weekends';
+  if (days.length === 0) return '仅一次';
+  if (days.length === 7) return '每天';
+  if (days.length === 5 && !days.includes(0) && !days.includes(6)) return '工作日';
+  if (days.length === 2 && days.includes(0) && days.includes(6)) return '周末';
 
-  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const dayNames = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
   return days.map(d => dayNames[d]).join(', ');
 }
 
@@ -145,7 +145,7 @@ saveAlarmBtn.addEventListener('click', async () => {
   const label = alarmLabelInput.value;
 
   if (!time) {
-    alert('Please select a time');
+    alert('请选择时间');
     return;
   }
 
@@ -186,7 +186,7 @@ startCustomTimerBtn.addEventListener('click', async () => {
   const totalMs = (minutes * 60 + seconds) * 1000;
 
   if (totalMs <= 0) {
-    alert('Please enter a valid time');
+    alert('请输入有效的时间');
     return;
   }
 
@@ -206,7 +206,7 @@ function renderTimers() {
   if (timers.length === 0) {
     activeTimersList.innerHTML = `
       <div class="empty-state">
-        <p>No active timers</p>
+        <p>暂无倒计时</p>
       </div>
     `;
     return;
@@ -216,7 +216,7 @@ function renderTimers() {
     <div class="timer-item" data-id="${timer.id}">
       <div>
         <div class="timer-display" id="display-${timer.id}">${formatDuration(timer.remaining)}</div>
-        <div class="timer-label">${timer.label || 'Timer'}</div>
+        <div class="timer-label">${timer.label || '倒计时'}</div>
       </div>
       <div class="timer-controls">
         <button class="timer-control-btn" onclick="window.toggleTimer('${timer.id}', ${!timer.paused})">

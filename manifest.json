@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Alarm & Timer",
+  "name": "闹钟 & 倒计时",
   "version": "1.0.0",
-  "description": "Alarm clock and countdown timer for your browser",
+  "description": "为您的浏览器提供闹钟和倒计时功能",
   "permissions": [
     "alarms",
     "storage",
@@ -13,7 +13,7 @@
   },
   "action": {
     "default_popup": "popup/popup.html",
-    "default_title": "Alarm & Timer",
+    "default_title": "闹钟 & 倒计时",
     "default_icon": {
       "48": "assets/icon.png",
       "128": "assets/icon.png"

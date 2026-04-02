@@ -40,13 +40,13 @@ function startAlarmChecker() {
  * Trigger an alarm
  */
 async function triggerAlarm(alarm) {
-  const label = alarm.label || 'Alarm';
+  const label = alarm.label || '闹钟';
 
   sendNotification({
     type: 'alarm',
     id: `alarm_${alarm.id}_${Date.now()}`,
     title: `⏰ ${label}`,
-    message: `It's ${formatTime(new Date())}!`
+    message: `时间到了 ${formatTime(new Date())}！`
   });
 
   playSound(alarm.sound || 'default.mp3');
@@ -95,13 +95,13 @@ function startTimerChecker() {
  * Trigger timer completion
  */
 async function triggerTimer(timer) {
-  const label = timer.label || 'Timer';
+  const label = timer.label || '倒计时';
 
   sendNotification({
     type: 'timer',
     id: `timer_${timer.id}_${Date.now()}`,
-    title: `⏱️ ${label} Complete`,
-    message: 'Your timer has finished!'
+    title: `⏱️ ${label} 结束`,
+    message: '倒计时已结束！'
   });
 
   playSound('timer.mp3');
