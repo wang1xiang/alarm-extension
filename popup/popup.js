@@ -51,6 +51,8 @@ async function loadState() {
     timers = state.timers || [];
     renderAlarms();
     renderTimers();
+    bindAlarmEvents();
+    bindTimerEvents();
   } catch (error) {
     console.error('Failed to load state:', error);
   }
@@ -79,14 +81,38 @@ function renderAlarms() {
       </div>
       <div class="alarm-actions">
         <label class="toggle-switch">
-          <input type="checkbox" ${alarm.enabled ? 'checked' : ''}
-                 onchange="window.toggleAlarm('${alarm.id}', this.checked)">
+          <input type="checkbox" ${alarm.enabled ? 'checked' : ''} data-alarm-id="${alarm.id}">
           <span class="toggle-slider"></span>
         </label>
-        <button class="delete-btn" onclick="event.stopPropagation(); window.deleteAlarm('${alarm.id}')">✕</button>
+        <button class="delete-btn" data-alarm-id="${alarm.id}">✕</button>
       </div>
     </div>
   `).join('');
+
+  // Bind events after rendering
+  bindAlarmEvents();
+}
+
+// Bind events to dynamically rendered elements
+function bindAlarmEvents() {
+  // Delete buttons
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.alarmId;
+      console.log('Delete button clicked, alarm id:', id);
+      window.deleteAlarm(id);
+    });
+  });
+
+  // Toggle switches
+  document.querySelectorAll('.toggle-switch input').forEach(checkbox => {
+    checkbox.addEventListener('change', (e) => {
+      const id = checkbox.dataset.alarmId;
+      console.log('Toggle alarm:', id, 'enabled:', e.target.checked);
+      window.toggleAlarm(id, e.target.checked);
+    });
+  });
 }
 
 function formatRepeat(days) {
@@ -101,6 +127,7 @@ function formatRepeat(days) {
 
 // Alarm actions
 window.toggleAlarm = async function(id, enabled) {
+  console.log('toggleAlarm called with:', id, enabled);
   const alarm = alarms.find(a => a.id === id);
   if (alarm) {
     alarm.enabled = enabled;
@@ -116,7 +143,7 @@ window.toggleAlarm = async function(id, enabled) {
 };
 
 window.deleteAlarm = async function(id) {
-  console.log('Deleting alarm:', id);
+  console.log('deleteAlarm called with:', id);
   try {
     const result = await sendMessage({ type: 'REMOVE_ALARM', id });
     console.log('REMOVE_ALARM result:', result);
@@ -233,13 +260,30 @@ function renderTimers() {
         <div class="timer-label">${timer.label || '倒计时'}</div>
       </div>
       <div class="timer-controls">
-        <button class="timer-control-btn" onclick="window.toggleTimer('${timer.id}', ${!timer.paused})">
+        <button class="timer-control-btn" data-timer-id="${timer.id}" data-action="toggle">
           ${timer.paused ? '▶' : '⏸'}
         </button>
-        <button class="timer-control-btn" onclick="window.deleteTimer('${timer.id}')">✕</button>
+        <button class="timer-control-btn" data-timer-id="${timer.id}" data-action="delete">✕</button>
       </div>
     </div>
   `).join('');
+
+  bindTimerEvents();
+}
+
+function bindTimerEvents() {
+  document.querySelectorAll('.timer-control-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.timerId;
+      const action = btn.dataset.action;
+      if (action === 'toggle') {
+        const timer = timers.find(t => t.id === id);
+        window.toggleTimer(id, timer ? !timer.paused : false);
+      } else if (action === 'delete') {
+        window.deleteTimer(id);
+      }
+    });
+  });
 }
 
 function formatDuration(ms) {
