@@ -77,7 +77,7 @@ function renderAlarms() {
       <div>
         <div class="alarm-time">${alarm.time}</div>
         <div class="alarm-label">${alarm.label || '闹钟'}</div>
-        <div class="alarm-repeat" style="font-size: 12px;">${formatRepeat(alarm.repeat)}</div>
+        <div class="alarm-repeat">${formatRepeat(alarm.repeat)}</div>
       </div>
       <div class="alarm-actions">
         <label class="toggle-switch">
