@@ -2,7 +2,6 @@
 
 importScripts('../utils/alarm.js');
 importScripts('../utils/timer.js');
-importScripts('../utils/notification.js');
 
 // State
 let alarms = [];
@@ -42,12 +41,17 @@ function startAlarmChecker() {
 async function triggerAlarm(alarm) {
   const label = alarm.label || '闹钟';
 
-  sendNotification({
-    type: 'alarm',
-    id: `alarm_${alarm.id}_${Date.now()}`,
-    title: `⏰ ${label}`,
-    message: `时间到了 ${formatTime(new Date())}！`
-  });
+  // Request permission for Chrome notifications
+  if (chrome.notifications) {
+    chrome.notifications.create(`alarm_${alarm.id}_${Date.now()}`, {
+      type: 'basic',
+      iconUrl: 'assets/icon.png',
+      title: `⏰ ${label}`,
+      message: `时间到了 ${formatTime(new Date())}！`,
+      priority: 2,
+      requireInteraction: true
+    });
+  }
 
   playSound(alarm.sound || 'default.mp3');
 }
@@ -97,12 +101,16 @@ function startTimerChecker() {
 async function triggerTimer(timer) {
   const label = timer.label || '倒计时';
 
-  sendNotification({
-    type: 'timer',
-    id: `timer_${timer.id}_${Date.now()}`,
-    title: `⏱️ ${label} 结束`,
-    message: '倒计时已结束！'
-  });
+  if (chrome.notifications) {
+    chrome.notifications.create(`timer_${timer.id}_${Date.now()}`, {
+      type: 'basic',
+      iconUrl: 'assets/icon.png',
+      title: `⏱️ ${label} 结束`,
+      message: '倒计时已结束！',
+      priority: 2,
+      requireInteraction: true
+    });
+  }
 
   playSound('timer.mp3');
 }
@@ -157,14 +165,25 @@ async function handleMessage(message) {
       await chrome.storage.local.set({ timers: activeTimers });
       return { success: true, timers: activeTimers };
 
+    case 'TEST_NOTIFICATION':
+      if (chrome.notifications) {
+        chrome.notifications.create(`test_${Date.now()}`, {
+          type: 'basic',
+          iconUrl: 'assets/icon.png',
+          title: '测试通知',
+          message: '通知功能正常工作！',
+          priority: 2,
+          requireInteraction: true
+        });
+      }
+      return { success: true };
+
     case 'REQUEST_PERMISSIONS':
-      const granted = await chrome.permissions.request({
-        permissions: ['notifications']
-      });
-      return { success: granted };
+      // Chrome extensions with notifications permission in manifest don't need runtime request
+      return { success: true };
 
     default:
-      return { error: 'Unknown message type' };
+      return { error: '未知消息类型' };
   }
 }
 
