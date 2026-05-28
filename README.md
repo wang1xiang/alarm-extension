@@ -1,87 +1,87 @@
-# Alarm & Timer - Browser Extension
+# 闹钟 & 倒计时 - 浏览器扩展
 
-A Chrome/Edge browser extension providing alarm clock and countdown timer functionality.
+一个适用于 Chrome/Edge 浏览器的闹钟和倒计时扩展。
 
-## Features
+## 功能特性
 
-- ⏰ **Alarms**: Set multiple alarms with custom repeat schedules
-- ⏱️ **Timers**: Multiple concurrent countdown timers with presets
-- 🔔 **Notifications**: Desktop notifications and sound alerts
-- 💾 **Persistent**: Your alarms and timers are saved automatically
+- ⏰ **闹钟**：设置多个闹钟，支持自定义重复计划
+- ⏱️ **倒计时**：支持多个同时运行的倒计时，带快捷预设
+- 🔔 **通知**：桌面通知和声音提醒
+- 💾 **持久化**：自动保存您的闹钟和倒计时
 
-## Installation
+## 安装方法
 
-### Development
+### 开发环境
 
-1. Open Chrome and navigate to `chrome://extensions/`
-2. Enable "Developer mode" (toggle in top right)
-3. Click "Load unpacked"
-4. Select the `alarm-extension` folder
+1. 打开 Chrome 浏览器，访问 `chrome://extensions/`
+2. 启用右上角的"开发者模式"
+3. 点击"加载已解压的扩展程序"
+4. 选择 `alarm-extension` 文件夹
 
-### Production
+### 生产环境
 
-Download from Chrome Web Store (coming soon).
+即将在 Chrome Web Store 提供下载。
 
-## Usage
+## 使用方法
 
-### Setting an Alarm
+### 设置闹钟
 
-1. Click the extension icon
-2. Click the "+" button in the Alarms tab
-3. Select the time and optional label
-4. Choose repeat days (leave empty for one-time alarm)
-5. Click Save
+1. 点击扩展图标
+2. 在"闹钟"标签页点击"+"按钮
+3. 选择时间和可选标签
+4. 选择重复日期（留空则为一次性闹钟）
+5. 点击保存
 
-### Starting a Timer
+### 启动倒计时
 
-1. Click the extension icon
-2. Go to the Timers tab
-3. Click a preset (1, 5, 10, or 25 minutes) or enter custom time
-4. Click Start
+1. 点击扩展图标
+2. 进入"倒计时"标签页
+3. 点击预设按钮（1 分钟、5 分钟、10 分钟、25 分钟）或输入自定义时间
+4. 点击开始
 
-### Settings
+### 设置选项
 
-- Change alert sound
-- Adjust volume
-- Enable/disable notifications
-- Test notification
+- 更改提醒声音
+- 调节音量
+- 启用/禁用通知
+- 测试通知
 
-## Development
+## 开发
 
-### Project Structure
+### 项目结构
 
 ```
 alarm-extension/
-├── manifest.json          # Extension configuration
+├── manifest.json          # 扩展配置
 ├── background/
-│   └── service-worker.js  # Background alarm/timer logic
+│   └── service-worker.js  # 后台闹钟/倒计时逻辑
 ├── popup/
-│   ├── popup.html         # UI structure
-│   ├── popup.css          # UI styles
-│   └── popup.js           # UI logic
+│   ├── popup.html         # UI 结构
+│   ├── popup.css          # UI 样式
+│   └── popup.js           # UI 逻辑
 ├── utils/
-│   ├── alarm.js           # Alarm helpers
-│   ├── timer.js           # Timer helpers
-│   └── notification.js    # Notification helpers
+│   ├── alarm.js           # 闹钟工具函数
+│   ├── timer.js           # 倒计时工具函数
+│   └── notification.js    # 通知工具函数
 ├── styles/
-│   └── common.css         # Shared styles
+│   └── common.css         # 共享样式
 └── assets/
-    ├── icon.png           # Extension icon
-    └── sounds/            # Alert sounds
+    ├── icon.png           # 扩展图标
+    └── sounds/            # 提醒声音
 ```
 
-### Testing
+### 测试
 
-- Alarms: Set an alarm for 1-2 minutes in the future and wait
-- Timers: Start a 1-minute timer and verify notification
-- Permissions: Ensure notification permission is requested
+- 闹钟：设置一个 1-2 分钟后的闹钟并等待
+- 倒计时：启动 1 分钟倒计时并验证通知
+- 权限：确保请求通知权限
 
-## Permissions
+## 权限说明
 
-- `alarms` - Background scheduling
-- `storage` - Save alarms and timers
-- `notifications` - Desktop notifications
+- `alarms` - 后台调度
+- `storage` - 保存闹钟和倒计时
+- `notifications` - 桌面通知
 
-## License
+## 许可证
 
 MIT
