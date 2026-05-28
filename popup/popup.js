@@ -320,6 +320,18 @@ testNotificationBtn.addEventListener('click', async () => {
 // Initialize
 loadState();
 
+// Listen for messages from service worker
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'SHOW_ALERT') {
+    // Use setTimeout to avoid blocking the message channel
+    setTimeout(() => {
+      alert(message.message);
+    }, 0);
+  }
+  sendResponse({ success: true });
+  return true;
+});
+
 // Update timer displays every second
 setInterval(async () => {
   const state = await sendMessage({ type: 'GET_STATE' });

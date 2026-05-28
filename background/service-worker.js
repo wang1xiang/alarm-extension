@@ -40,18 +40,10 @@ function startAlarmChecker() {
  */
 async function triggerAlarm(alarm) {
   const label = alarm.label || '闹钟';
+  const message = `⏰ ${label}\n时间到了 ${formatTime(new Date())}！`;
 
-  // Request permission for Chrome notifications
-  if (chrome.notifications) {
-    chrome.notifications.create(`alarm_${alarm.id}_${Date.now()}`, {
-      type: 'basic',
-      iconUrl: chrome.runtime.getURL('assets/icon.png'),
-      title: `⏰ ${label}`,
-      message: `时间到了 ${formatTime(new Date())}！`,
-      priority: 2,
-      requireInteraction: true
-    });
-  }
+  // Notify popup page to show alert
+  chrome.runtime.sendMessage({ type: 'SHOW_ALERT', message });
 
   playSound(alarm.sound || 'default.mp3');
 }
@@ -100,17 +92,10 @@ function startTimerChecker() {
  */
 async function triggerTimer(timer) {
   const label = timer.label || '倒计时';
+  const message = `⏱️ ${label} 结束\n时间到了 ${formatTime(new Date())}！`;
 
-  if (chrome.notifications) {
-    chrome.notifications.create(`timer_${timer.id}_${Date.now()}`, {
-      type: 'basic',
-      iconUrl: chrome.runtime.getURL('assets/icon.png'),
-      title: `⏱️ ${label} 结束`,
-      message: '倒计时已结束！',
-      priority: 2,
-      requireInteraction: true
-    });
-  }
+  // Notify popup page to show alert
+  chrome.runtime.sendMessage({ type: 'SHOW_ALERT', message });
 
   playSound('timer.mp3');
 }
@@ -175,18 +160,9 @@ async function handleMessage(message) {
       return { success: true, timers: activeTimers };
 
     case 'TEST_NOTIFICATION':
-      if (chrome.notifications) {
-        chrome.notifications.create(`test_${Date.now()}`, {
-          type: 'basic',
-          iconUrl: chrome.runtime.getURL('assets/icon.png'),
-          title: '测试通知',
-          message: '通知功能正常工作！',
-          priority: 2,
-          requireInteraction: true
-        });
-        return { success: true };
-      }
-      return { success: false, error: 'Notifications API not available' };
+      // Send message to popup to show alert
+      chrome.runtime.sendMessage({ type: 'SHOW_ALERT', message: '测试通知\n通知功能正常工作！' });
+      return { success: true };
 
     case 'REQUEST_PERMISSIONS':
       return { success: true };
