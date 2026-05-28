@@ -124,22 +124,31 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 async function handleMessage(message) {
+  console.log('Service Worker received message:', message);
+
   switch (message.type) {
     case 'GET_STATE':
       return { alarms, timers: activeTimers };
 
     case 'ADD_ALARM':
+      console.log('Adding alarm:', message.alarm);
       alarms.push(message.alarm);
       await chrome.storage.local.set({ alarms });
+      console.log('Alarm added, storage updated:', alarms);
       return { success: true, alarms };
 
     case 'REMOVE_ALARM':
+      console.log('Removing alarm:', message.id);
+      const beforeCount = alarms.length;
       alarms = alarms.filter(a => a.id !== message.id);
+      console.log('After filter:', alarms.length, 'alarms');
       await chrome.storage.local.set({ alarms });
+      console.log('Alarm removed, storage updated');
       return { success: true, alarms };
 
     case 'UPDATE_ALARM':
       const index = alarms.findIndex(a => a.id === message.alarm.id);
+      console.log('Update alarm index:', index);
       if (index !== -1) {
         alarms[index] = message.alarm;
         await chrome.storage.local.set({ alarms });
@@ -175,11 +184,11 @@ async function handleMessage(message) {
           priority: 2,
           requireInteraction: true
         });
+        return { success: true };
       }
-      return { success: true };
+      return { success: false, error: 'Notifications API not available' };
 
     case 'REQUEST_PERMISSIONS':
-      // Chrome extensions with notifications permission in manifest don't need runtime request
       return { success: true };
 
     default:

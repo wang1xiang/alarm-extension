@@ -58,6 +58,8 @@ async function loadState() {
 
 // Render alarms
 function renderAlarms() {
+  console.log('Rendering alarms:', alarms);
+
   if (alarms.length === 0) {
     alarmList.innerHTML = `
       <div class="empty-state">
@@ -81,7 +83,7 @@ function renderAlarms() {
                  onchange="window.toggleAlarm('${alarm.id}', this.checked)">
           <span class="toggle-slider"></span>
         </label>
-        <button class="delete-btn" onclick="window.deleteAlarm('${alarm.id}')">✕</button>
+        <button class="delete-btn" onclick="event.stopPropagation(); window.deleteAlarm('${alarm.id}')">✕</button>
       </div>
     </div>
   `).join('');
@@ -102,16 +104,27 @@ window.toggleAlarm = async function(id, enabled) {
   const alarm = alarms.find(a => a.id === id);
   if (alarm) {
     alarm.enabled = enabled;
-    const result = await sendMessage({ type: 'UPDATE_ALARM', alarm });
-    alarms = result.alarms;
-    renderAlarms();
+    try {
+      const result = await sendMessage({ type: 'UPDATE_ALARM', alarm });
+      console.log('UPDATE_ALARM result:', result);
+      alarms = result.alarms || alarms;
+      renderAlarms();
+    } catch (error) {
+      console.error('Failed to update alarm:', error);
+    }
   }
 };
 
 window.deleteAlarm = async function(id) {
-  const result = await sendMessage({ type: 'REMOVE_ALARM', id });
-  alarms = result.alarms;
-  renderAlarms();
+  console.log('Deleting alarm:', id);
+  try {
+    const result = await sendMessage({ type: 'REMOVE_ALARM', id });
+    console.log('REMOVE_ALARM result:', result);
+    alarms = result.alarms || alarms.filter(a => a.id !== id);
+    renderAlarms();
+  } catch (error) {
+    console.error('Failed to delete alarm:', error);
+  }
 };
 
 // Add alarm form
